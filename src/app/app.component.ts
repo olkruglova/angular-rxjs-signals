@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { from, of, Subscription } from 'rxjs';
+import { from, fromEvent, of, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -34,6 +34,23 @@ export class AppComponent implements OnInit, OnDestroy {
         this.subscription.add(
             of("aaa", "bbb", "ccc").subscribe({
                 next: item => console.log(item),
+                error: err => console.error(err),
+                complete: () => console.log('Complete')
+            })
+        )
+
+            
+        this.subscription.add(
+            fromEvent(document, "click").subscribe({
+                next: event => console.log(event.target),
+                error: err => console.error(err),
+                complete: () => console.log('Complete')
+            })
+        )
+
+        this.subscription.add(
+            fromEvent(document, "keydown").subscribe({
+                next: event => console.log((event as KeyboardEvent).key),
                 error: err => console.error(err),
                 complete: () => console.log('Complete')
             })
