@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { from, fromEvent, of, Subscription } from 'rxjs';
+import { filter, from, fromEvent, map, of, Subscription, take, tap, timer } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -16,11 +16,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.subscription.add(
-            of(2,4,6,8).subscribe(item => console.log(item))
+            of(2,4,5,1,0,6,8,11,12).pipe(filter(x => x % 2 === 0), map(item => item *2), tap(item => console.log(item))).subscribe()
         )
 
         this.subscription.add(
-            of([2,4,6,8]).subscribe(arr => console.log(arr))
+            of([2,4,6,8]).pipe(map(item => [...item, 33])).subscribe(arr => console.log("111", arr))
         )
 
         this.subscription.add(
@@ -54,6 +54,28 @@ export class AppComponent implements OnInit, OnDestroy {
                 error: err => console.error(err),
                 complete: () => console.log('Complete')
             })
+        )
+
+        this.subscription.add(
+            timer(0, 1000).pipe(
+                take(5)
+            ).subscribe({
+                next: timer => console.log("Timer: ", timer),
+                error: err => console.error(err),
+                complete: () => console.log('No more ticks')
+            })
+        )
+
+        const apples$ = from([{id: 1, type: 'Granny Smith'}, {id: 2, type: 'Macintosh'}, {id: 3, type: 'Gala'}]);
+
+        this.subscription.add(
+            apples$
+            .pipe(
+                filter(i => i.id >= 2),
+                map(apple =>({...apple, color: 'red'})),
+                tap(apple => console.log(apple))
+            )
+            .subscribe()
         )
     }
 
