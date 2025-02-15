@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { from, fromEvent, of, Subscription } from 'rxjs';
+import { from, fromEvent, map, of, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -16,11 +16,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.subscription.add(
-            of(2,4,6,8).subscribe(item => console.log(item))
+            of(2,4,6,8).pipe(map(item => item *2)).subscribe(item => console.log(item))
         )
 
         this.subscription.add(
-            of([2,4,6,8]).subscribe(arr => console.log(arr))
+            of([2,4,6,8]).pipe(map(item => [...item, 33])).subscribe(arr => console.log("111", arr))
         )
 
         this.subscription.add(
@@ -51,6 +51,21 @@ export class AppComponent implements OnInit, OnDestroy {
         this.subscription.add(
             fromEvent(document, "keydown").subscribe({
                 next: event => console.log((event as KeyboardEvent).key),
+                error: err => console.error(err),
+                complete: () => console.log('Complete')
+            })
+        )
+
+        const apples$ = from([{id: 1, type: 'Granny Smith'}, {id: 2, type: 'Macintosh'}, {id: 3, type: 'Gala'}]);
+
+        this.subscription.add(
+            apples$
+            .pipe(
+                map(apple =>({...apple, color: 'red'})),
+            )
+            
+            .subscribe({
+                next: apple => console.log(apple),
                 error: err => console.error(err),
                 complete: () => console.log('Complete')
             })
