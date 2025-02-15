@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { filter, from, fromEvent, map, of, Subscription, tap } from 'rxjs';
+import { filter, from, fromEvent, map, of, Subscription, take, tap, timer } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -53,6 +53,16 @@ export class AppComponent implements OnInit, OnDestroy {
                 next: event => console.log((event as KeyboardEvent).key),
                 error: err => console.error(err),
                 complete: () => console.log('Complete')
+            })
+        )
+
+        this.subscription.add(
+            timer(0, 1000).pipe(
+                take(5)
+            ).subscribe({
+                next: timer => console.log("Timer: ", timer),
+                error: err => console.error(err),
+                complete: () => console.log('No more ticks')
             })
         )
 
