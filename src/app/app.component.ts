@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { from, fromEvent, map, of, Subscription } from 'rxjs';
+import { from, fromEvent, map, of, Subscription, tap } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +16,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.subscription.add(
-            of(2,4,6,8).pipe(map(item => item *2)).subscribe(item => console.log(item))
+            of(2,4,6,8).pipe(map(item => item *2), tap(item => console.log(item))).subscribe()
         )
 
         this.subscription.add(
@@ -62,13 +62,9 @@ export class AppComponent implements OnInit, OnDestroy {
             apples$
             .pipe(
                 map(apple =>({...apple, color: 'red'})),
+                tap(apple => console.log(apple))
             )
-            
-            .subscribe({
-                next: apple => console.log(apple),
-                error: err => console.error(err),
-                complete: () => console.log('Complete')
-            })
+            .subscribe()
         )
     }
 
