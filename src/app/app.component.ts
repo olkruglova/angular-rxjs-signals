@@ -17,10 +17,11 @@ import {
   timer,
 } from 'rxjs';
 import { DemoComponent } from './demo/demo.component';
+import { DisplayComponent } from './display/display.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, DemoComponent],
+  imports: [RouterOutlet, DemoComponent, DisplayComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
   standalone: true,

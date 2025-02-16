@@ -14,7 +14,7 @@ export class DemoComponent {
   public data: any;
   private demoService = inject(DemoService);
 
-  readonly product$ = this.demoService.productsResult$.pipe(
+  readonly products$ = this.demoService.productsResult$.pipe(
     map((resp) => resp.data),
     catchError((err) => {
       this.errorMessage = err;
@@ -22,7 +22,9 @@ export class DemoComponent {
     })
   );
 
-  loadProducts() {
-    console.log('loadProducts');
+  readonly selectedProduct$ = this.demoService.productSelected$;
+
+  onSelected(productId: number): void {
+    this.demoService.productSelected(productId);
   }
 }

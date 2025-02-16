@@ -1,0 +1,19 @@
+button {
+  width: 100px;
+  height: 40px;
+  padding: 10px;
+}
+
+button.active {
+  background-color: green;
+  color: #fff;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+}
+
+button + button {
+  margin-top: 10px;
+}
