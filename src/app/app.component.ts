@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { concatMap, delay, filter, from, fromEvent, map, of, range, Subscription, take, tap, timer } from 'rxjs';
+import { concatMap, delay, filter, from, fromEvent, map, mergeMap, of, range, Subscription, take, tap, timer } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -88,8 +88,17 @@ export class AppComponent implements OnInit, OnDestroy {
                 .pipe(
                     delay(this.randomDelay())
                 )
-        )).subscribe(data => console.log("!!!!!!!", data))
+        )).subscribe(data => console.log("concatMap", data))
+
+        range(11, 5).pipe(
+           mergeMap(i => of(i)
+                .pipe(
+                    delay(this.randomDelay())
+                )
+        )).subscribe(data => console.log("mergeMap: ", data))
     }
+
+    
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
