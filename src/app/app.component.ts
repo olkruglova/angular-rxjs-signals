@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { filter, from, fromEvent, map, of, Subscription, take, tap, timer } from 'rxjs';
+import { concatMap, delay, filter, from, fromEvent, map, of, range, Subscription, take, tap, timer } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +13,11 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'angular-rxjs-signals';
 
   subscription: Subscription = new Subscription();
+
+  randomDelay() {
+    //random delay between 500 and 1500 ms
+    return Math.floor(Math.random() * 1000) + 500;
+  }
 
     ngOnInit() {
         this.subscription.add(
@@ -60,9 +65,9 @@ export class AppComponent implements OnInit, OnDestroy {
             timer(0, 1000).pipe(
                 take(5)
             ).subscribe({
-                next: timer => console.log("Timer: ", timer),
-                error: err => console.error(err),
-                complete: () => console.log('No more ticks')
+                // next: timer => console.log("Timer: ", timer),
+                // error: err => console.error(err),
+                // complete: () => console.log('No more ticks')
             })
         )
 
@@ -77,6 +82,13 @@ export class AppComponent implements OnInit, OnDestroy {
             )
             .subscribe()
         )
+
+        range(1, 5).pipe(
+            concatMap(i => of(i)
+                .pipe(
+                    delay(this.randomDelay())
+                )
+        )).subscribe(data => console.log("!!!!!!!", data))
     }
 
     ngOnDestroy() {
