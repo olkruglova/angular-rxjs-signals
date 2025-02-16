@@ -1,17 +1,17 @@
-<div *ngIf="product$ | async as products">
-  <div *ngFor="let product of products">
-    <div>{{ product }}</div>
+<div *ngIf="products$ | async as products">
+  <div class="button-container">
+    <button
+      *ngFor="let product of products"
+      typ="button"
+      class="button"
+      [ngClass]="{ active: product === (selectedProduct$ | async) }"
+      (click)="onSelected(product)"
+    >
+      {{ product }}
+    </button>
   </div>
 
-  <div *ngIf="!(product$ | async)">
+  <div *ngIf="!(products$ | async)">
     <div>There are no data. Try again</div>
   </div>
 </div>
-<button
-  typ="button"
-  class="button"
-  [ngClass]="{ active: true }"
-  (click)="loadProducts()"
->
-  Load Products
-</button>
