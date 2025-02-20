@@ -2,3 +2,17 @@
   <h1>{{ product.name }}</h1>
   <img [src]="product.image" alt="Image of product" />
 </div>
+
+<div>Quantity:</div>
+<div>{{ quantity() }}</div>
+
+<select [ngModel]="quantity()" (ngModelChange)="onQuantitySelected($event)">
+  <option disabled value="">---Select a quantity---</option>
+  <option *ngFor="let quantity of quantities()" [value]="quantity">
+    {{ quantity }}
+  </option>
+</select>
+
+<div>Product: {{ selectedProduct().name }}</div>
+<div>Product price: {{ selectedProduct().price }}</div>
+<div [style.color]="color()">Extended price: {{ exPrice() | currency }}</div>
